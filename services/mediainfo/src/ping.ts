@@ -12,7 +12,6 @@ import { connect } from "amqplib";
       const replyQueue = await channel.assertQueue("", {
         exclusive: true,
       });
-      await channel.bindQueue(replyQueue.queue, mediaingest.MediaInfoService.name, method.name);
       await channel.consume(replyQueue.queue, (message) => {
         if (!message) {
           return console.error("empty message");
@@ -22,12 +21,12 @@ import { connect } from "amqplib";
           return console.error("other correlation id", message.properties.correlationId);
         }
 
+        console.debug(message.content.toString());
         callback(null, Uint8Array.from(message.content));
         channel.ack(message);
       });
 
-      console.log("message published");
-      channel.publish(mediaingest.MediaInfoService.name, method.name, Buffer.from(requestData), {
+      channel.publish("", method.name, Buffer.from(requestData), {
         replyTo: replyQueue.queue,
         correlationId,
       });

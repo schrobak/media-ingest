@@ -14,7 +14,7 @@ const replyConsumer: MessageConsumer = async () => {
   }).finish();
 };
 
-export function createConsumer(channel: Channel, exchange: string, consumer: MessageConsumer) {
+export function createConsumer(channel: Channel, consumer: MessageConsumer) {
   return async function consumerWrapper(message: Message | null): Promise<void> {
     if (message === null) {
       return;
@@ -22,7 +22,7 @@ export function createConsumer(channel: Channel, exchange: string, consumer: Mes
 
     try {
       const reply = await consumer(message);
-      channel.publish(exchange, message.properties.replyTo, Buffer.from(reply), {
+      channel.publish("", message.properties.replyTo, Buffer.from(reply), {
         correlationId: message.properties.correlationId,
       });
       channel.ack(message);
@@ -41,11 +41,10 @@ export async function setupAmqp(dsn: string): Promise<void> {
   const mediaInfoService = new mediaingest.MediaInfoService(() => {
     // noop
   });
-  const exchange = await channel.assertExchange(mediaingest.MediaInfoService.name, "direct");
   const queue = await channel.assertQueue(mediaInfoService.getMediaInfo.name);
-  await channel.bindQueue(queue.queue, exchange.exchange, mediaInfoService.getMediaInfo.name);
+  // await channel.bindQueue(queue.queue, "", mediaInfoService.getMediaInfo.name);
 
-  await channel.consume(queue.queue, createConsumer(channel, exchange.exchange, replyConsumer), {
+  await channel.consume(queue.queue, createConsumer(channel, replyConsumer), {
     consumerTag: os.hostname(),
   });
 }
