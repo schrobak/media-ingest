@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package mediaingest;
+
+message MediaInfo {
+  message Format {
+    string name = 1;
+    float duration = 2;
+    int32 size = 3;
+  }
+
+  message Stream {
+    message Codec {
+      enum Type {
+        AUDIO = 0;
+        VIDEO = 1;
+      }
+
+      Type type = 1;
+      string name = 2;
+    }
+
+    Codec codec = 1;
+  }
+
+  Format format = 1;
+  repeated Stream streams = 2;
+}
+
+
+message GetMediaInforRequest {
+  string source = 1;
+}
+
+service MediaInfoService {
+  rpc GetMediaInfo(GetMediaInforRequest) returns (MediaInfo);
+}
+
