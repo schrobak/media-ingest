@@ -1,8 +1,18 @@
 {
   "name": "@media-ingest/mediainfo",
-  "private": true,
   "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "ts-node-dev -T --respawn --watch src,.env --no-notify src/index.ts",
+    "generate:proto": "npm run generate:protojs && npm run generate:protots",
+    "generate:protojs": "pbjs -t static-module -w commonjs -o src/proto/mediainfo.js ../../protobuf/mediainfo.proto",
+    "generate:protots": "pbts -o src/proto/mediainfo.d.ts src/proto/mediainfo.js"
+  },
   "dependencies": {
+    "amqplib": "0.8.0",
     "protobufjs": "6.11.2"
+  },
+  "devDependencies": {
+    "@types/amqplib": "0.8.0"
   }
 }
