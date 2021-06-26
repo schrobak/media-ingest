@@ -25,9 +25,9 @@ export async function setupAmqp(dsn: string): Promise<void> {
       }
 
       // get request
-      const req = mediaingest.GetMediaInforRequest.decode(Uint8Array.from(message.content));
+      const req = mediaingest.GetMediaInfoRequest.decode(Uint8Array.from(message.content));
 
-      console.log(req, "media info request");
+      console.log(req);
 
       // prepare response
       const res = mediaingest.MediaInfo.encode({ format: { name: "pong" } }).finish();

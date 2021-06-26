@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "ts-node-dev -T --respawn --watch src,.env --no-notify src/index.ts",
+    "lint:ts": "tsc --noEmit",
     "generate:proto": "npm run generate:protojs && npm run generate:protots",
     "generate:protojs": "pbjs -t static-module -w commonjs -o src/proto/mediainfo.js ../../protobuf/mediainfo.proto",
     "generate:protots": "pbts -o src/proto/mediainfo.d.ts src/proto/mediainfo.js"

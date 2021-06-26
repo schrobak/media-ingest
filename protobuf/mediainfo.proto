@@ -28,11 +28,11 @@ message MediaInfo {
 }
 
 
-message GetMediaInforRequest {
+message GetMediaInfoRequest {
   string source = 1;
 }
 
 service MediaInfoService {
-  rpc GetMediaInfo(GetMediaInforRequest) returns (MediaInfo);
+  rpc GetMediaInfo(GetMediaInfoRequest) returns (MediaInfo);
 }
 
