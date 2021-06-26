@@ -25,6 +25,9 @@ import { connect } from "amqplib";
           }
 
           console.log("rpc call response received");
+          if (message.properties.type === mediaingest.MediaInfoError.name) {
+            return callback(new Error(mediaingest.MediaInfoError.decode(Uint8Array.from(message.content)).message));
+          }
           callback(null, Uint8Array.from(message.content));
         },
         {
@@ -46,7 +49,7 @@ import { connect } from "amqplib";
     console.log(mediaInfo);
   } catch (e) {
     console.error(e);
-    // } finally {
-    //   await connection.close();
+  } finally {
+    await connection.close();
   }
 })();

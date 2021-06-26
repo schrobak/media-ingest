@@ -2,6 +2,10 @@ syntax = "proto3";
 
 package mediaingest;
 
+message MediaInfoError {
+  string message = 1;
+}
+
 message MediaInfo {
   message Format {
     string name = 1;
